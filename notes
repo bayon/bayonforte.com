@@ -1,1 +1,65 @@
 work notes on dev:
+
+certbot notes:
+IMPORTANT NOTES:
+ - Congratulations! Your certificate and chain have been saved at:
+   /etc/letsencrypt/live/www.bayonforte.com/fullchain.pem
+   Your key file has been saved at:
+   /etc/letsencrypt/live/www.bayonforte.com/privkey.pem
+   Your cert will expire on 2021-02-07. To obtain a new or tweaked
+   version of this certificate in the future, simply run certbot again
+   with the "certonly" option. To non-interactively renew *all* of
+   your certificates, run "certbot renew"
+ - If you like Certbot, please consider supporting our work by:
+
+   Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+   Donating to EFF:                    https://eff.org/donate-le
+
+   https://www.bayonforte.com/
+   worked but the 'dry run' test for renewal did NOT work ... 
+
+
+FAILED DRY RUN: ===========================================================
+
+   bayon@ubuntu-s-1vcpu-2gb-nyc1-01:~$ sudo certbot renew --dry-run
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Processing /etc/letsencrypt/renewal/www.bayonforte.com.conf
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Cert not due for renewal, but simulating renewal for dry run
+Plugins selected: Authenticator nginx, Installer nginx
+Renewing an existing certificate
+Performing the following challenges:
+http-01 challenge for www.bayonforte.com
+Waiting for verification...
+Challenge failed for domain www.bayonforte.com
+http-01 challenge for www.bayonforte.com
+Cleaning up challenges
+Attempting to renew cert (www.bayonforte.com) from /etc/letsencrypt/renewal/www.bayonforte.com.conf produced an unexpected error: Some challenges have failed.. Skipping.
+All renewal attempts failed. The following certs could not be renewed:
+  /etc/letsencrypt/live/www.bayonforte.com/fullchain.pem (failure)
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+** DRY RUN: simulating 'certbot renew' close to cert expiry
+**          (The test certificates below have not been saved.)
+
+All renewal attempts failed. The following certs could not be renewed:
+  /etc/letsencrypt/live/www.bayonforte.com/fullchain.pem (failure)
+** DRY RUN: simulating 'certbot renew' close to cert expiry
+**          (The test certificates above have not been saved.)
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+1 renew failure(s), 0 parse failure(s)
+
+IMPORTANT NOTES:
+ - The following errors were reported by the server:
+
+   Domain: www.bayonforte.com
+   Type:   dns
+   Detail: During secondary validation: DNS problem: NXDOMAIN looking
+   up A for www.bayonforte.com - check that a DNS record exists for
+   this domain
+
+
+   FAILED DRY RUN: ===========================================================
+
