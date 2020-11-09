@@ -1,0 +1,86 @@
+
+ 1: ssh 
+ Here:  i added the ssh key generated on bitbucket settings to my local ssh and successfully used it to ssh in to droplet.
+  ssh -i ~/.ssh/pipeline_ssh_key root@157.245.216.183
+
+I added same key to droplet under .ssh/ 
+bayonforte_pipeline_key.pub
+
+
+SO...this should work from yaml.
+ssh -i ~/.ssh/bayonforte_pipeline_key root@157.245.216.183
+
+Permission Denied Public Key MEANS that SSH IS ! set up and permission is the issue.
+
+Now I added the key to the repo right next to the yaml file.
+I THINK this would work.
+ssh -i bayonforte_pipeline_key root@157.245.216.183
+
+////
+
+CICD video tutorial...just started.
+https://www.youtube.com/watch?v=tVNHkjI8dHI
+
+Deploying React Applications with Webhooks and Slack on Ubuntu 16.04 ( good )
+https://www.digitalocean.com/community/tutorials/deploying-react-applications-with-webhooks-and-slack-on-ubuntu-16-04
+
+
+
+1)
+https://www.digitalocean.com/docs/droplets/how-to/add-ssh-keys/
+ssh-keygen
+
+Enter file in which to save the key (/root/.ssh/id_rsa): /root/.ssh/droplet_key
+Enter passphrase (empty for no passphrase): 
+Enter same passphrase again: 
+Your identification has been saved in /root/.ssh/droplet_key.
+Your public key has been saved in /root/.ssh/droplet_key.pub.
+The key fingerprint is:
+SHA256:divtVuX2EaPQepvUIcdZ77P90kAQPLbN6XeafXd1rlU root@docker-s-1vcpu-1gb-nyc3-01
+The key's randomart image is:
++---[RSA 2048]----+
+|           ...   |
+|            =   .|
+|           ..*..+|
+|           ..o*B.|
+|        S . o==.E|
+|       . o o.+=+B|
+|        . o.o.oXX|
+|         o.  o+oX|
+|         ..   .o*|
++----[SHA256]-----+
+root@docker-s-1vcpu-1gb-nyc3-01:~# 
+
+////
+root@docker-s-1vcpu-1gb-nyc3-01:~/.ssh# cat droplet_key.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDWF22s9PZHNLCjV6VugR69+F4MuHhXUMLXTGMYaM27nCt4qdUMlzsEinl3A0HmHftZPlSCDgxEKLxmkk2AnamCJoNCZ0BMi+kV1vrZcV59Ug3EoAMPeUeq9sqSMpxdLpUO5IQNnBHVUPNzisNUoCKk59wDnmeww/OMe/Kw8nnIXHy0jicV9ptZG2N6qcfqoNXf2a5TK7kyRzgjauZaxs5oEVn6YQCkAYiXGRKLpc9xcQ38mFZ6k4fVYP9103zSuVgt/hyjPan59t6myOq2et4rW7nPCT6cA6jhMkTn5b+K3DWBrkcqf/3hXFoZycTaXw0X0dw69N3tdh4G8qyYSQP5 root@docker-s-1vcpu-1gb-nyc3-01
+root@docker-s-1vcpu-1gb-nyc3-01:~/.ssh# 
+
+BITBUCKET put my own private and public SSH key generated on the droplet.
+bibucket stores private here.
+~/.ssh/config.
+We make sure that the public is here on our droplet.
+~/.ssh/authorized_keys
+both are now true.
+
+
+SCRIPT for ssh to include in my bitbucket-pipelines.yml file when it is ready.
+script:
+  - pipe: atlassian/rsync-deploy:0.4.0
+    variables:
+      USER: 'ec2-user'
+      SERVER: '127.0.0.1'
+      REMOTE_PATH: '/var/www/build/'
+      LOCAL_PATH: 'public'
+
+
+SUCCESS: 
+root@docker-s-1vcpu-1gb-nyc3-01:/var/www/build# ls
+nothing_yet.txt  public
+root@docker-s-1vcpu-1gb-nyc3-01:/var/www/build# cd public/
+root@docker-s-1vcpu-1gb-nyc3-01:/var/www/build/public# ls
+favicon.ico  index.html  manifest.json
+root@docker-s-1vcpu-1gb-nyc3-01:/var/www/build/public# 
+
+
+so, I've got it working to some extent but I do not have a seemless deployiment process.

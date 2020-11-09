@@ -1,0 +1,203 @@
+
+===================================================================================
+
+ssh root@157.245.216.183
+
+https://github.com/varunon9/getting-started-docker-mysql-nodejs.git
+
+//DAMN ! //////////////////////////////////////////////
+// cors vs cores() !
+// also, had to add cors to package.json ? !!!
+///////////////////////////////////////////////////////
+//TO COMPLETE THE PROCESS: 
+steps: 
+1) docker clean slate on droplet .
+2) changed configs 
+mysql user: root 
+mysql pass: rootwerk
+database: fortworks 
+
+removed 'test-' from microservice names and dump.sql 
+
+*note: /root/bayonforte.com.microservices/getting-started-docker-mysql-nodejs
+COMMANDS: 
+=======>>>>>>>
+MYSQL: 
+
+3) docker build -t mysql .
+
+LAUNCH MYSQL CONTAINER: 
+4)
+docker run  -d \
+--publish 6603:3306 \
+--volume=/root/bayonforte.com.microservices/microservices/mysql-microservice/data:/var/lib/mysql \
+--name=mysql-microservice mysql
+
+5) docker logs mysql-microservice
+
+6) test connection ifconfig to verify IP.
+mysql -u root -p -h 172.17.0.1 -P 6603 -D forteworks    password is rootwerk. 
+//---> done deal . mysql working and tested. <-----
+
+API:
+7)
+docker build -t nodejs .
+
+8) run container with these customized changes: 
+
+*verify IP before building api container...
+docker inspect mysql-microservice | grep IPAddress
+
+
+docker run  -d \
+--publish 4000:4000 \
+-e MYSQL_USER='root' \
+-e MYSQL_PASSWORD='rootwerk' \
+-e MYSQL_DATABASE='forteworks' \
+-e MYSQL_HOST='172.17.0.2' \
+--link mysql-microservice:db \
+--name=nodejs-microservice nodejs
+
+docker logs nodejs-microservice
+
+
+IF no data , insert it here. 
+
+
+///////============================== 
+ENTER:
+mysql -u root -p -h 172.17.0.1 -P 6603 -D forteworks
+1) backup 
+    mysqldump -u root -p  forteworks > 2020-foo.sql 
+2) drop 
+   DROP DATABASE forteworks;
+3) recreate db 
+    CREATE DATABASE forteworks;
+    EXIT
+4) import sql 
+    mysql -u root -p forteworks < connect_bugs.sql  
+
+...
+
+BUILD IMAGE AND CONTAINER:
+docker build . -t <imagename> 
+docker run -p 80:80 --name <containername> <image name> 
+
+NETWORK: ( did not use with this installment).
+create:
+docker network create <networkname> 
+conect containers:
+docker network connect <networkname> <containername>
+
+ Reference:  
+ https://github.com/varunon9/getting-started-docker-mysql-nodejs
+
+
+React App to check services:
+docker build . -t  react-plain
+//docker run -p 80:80 --name reactplain.v.1 reactplain
+* I need to update my docker build command to those of my master.
+docker run  -d \
+--publish 80:80 \
+--name=react-plain.v.1 react-plain
+
+(:) --link nodejs-microservice \
+...end.
+
+
+TLDR;
+cd to the right dir!
+1
+docker build -t mysql .
+2
+docker run  -d \
+--publish 6603:3306 \
+--volume=/root/bayonforte.com.microservices/microservices/mysql-microservice/data:/var/lib/mysql \
+--name=mysql-microservice mysql
+3
+docker build -t nodejs .
+4
+docker run  -d \
+--publish 4000:4000 \
+-e MYSQL_USER='root' \
+-e MYSQL_PASSWORD='rootwerk' \
+-e MYSQL_DATABASE='forteworks' \
+-e MYSQL_HOST='172.17.0.2' \
+--link mysql-microservice:db \
+--name=nodejs-microservice nodejs
+
+5
+docker build . -t  react-plain
+6
+docker run  -d \
+--publish 80:80 \
+--name=react-plain.v.1 react-plain
+
+
+
+FOR LOCAL ONLY: ( * different VOLUME path. * mysql HOST:  )
+TLDR;
+cd to the right dir!
+1
+docker build -t mysql .
+2
+docker run  -d \
+--publish 6603:3306 \
+--volume=/Users/bayon/Projects/_me/bayonforte.com.microservices/microservices/mysql-microservice/data:/var/lib/mysql \
+--name=mysql-microservice mysql
+3
+docker build -t nodejs .
+4
+docker run  -d \
+--publish 4000:4000 \
+-e MYSQL_USER='root' \
+-e MYSQL_PASSWORD='rootwerk' \
+-e MYSQL_DATABASE='forteworks' \
+-e MYSQL_HOST='172.17.0.2' \
+--link mysql-microservice:db \
+--name=nodejs-microservice nodejs
+
+5
+docker build . -t  react-plain
+6
+docker run  -d \
+--publish 80:80 \
+--name=react-plain.v.1 react-plain
+
+
+
+
+
+///////////////////////////////////////////////////
+BRIEF: app dev refresh if all else is running good.
+
+docker container stop react-plain.v.1
+docker container rm react-plain.v.1
+
+cd correct?!
+docker build . -t  react-plain
+
+docker run  -d \
+--publish 80:80 \
+--name=react-plain.v.1 react-plain
+////////////////////////////////////////////////////
+
+
+
+docker container stop react-plain.v.1 | docker container rm react-plain.v.1
+ 
+
+ ///////////////////////////////////////////////////
+BRIEF: app dev refresh if all else is running good.
+
+docker container stop bayonforte.com.v.1
+docker container rm bayonforte.com.v.1
+
+cd correct?!
+docker build . -t  bayonforte.com
+
+docker run  -d \
+--publish 80:80 \
+--name=bayonforte.com.v.1 bayonforte.com
+////////////////////////////////////////////////////
+(?) build-deps <name change ? > 

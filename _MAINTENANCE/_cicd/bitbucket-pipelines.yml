@@ -1,0 +1,51 @@
+# This is a sample build configuration for JavaScript.
+# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+# These 2 commands were in the initial script:
+#          - npm install
+#          - npm test #FAILS IF NO TESTS FOUND.
+# - cat ./deploy.sh | ssh root@157.245.216.183
+# - echo "Deploy step finished"
+image: node:10.15.3
+
+pipelines:
+    default:
+        - step:
+              caches:
+                  - node
+              script: # Modify the commands below to build your repository.
+                  - echo "start pipeline default step script"
+                  #- npm install
+                  #- echo "npm is installed"
+                  #- echo "success"
+                  - echo "try cat util"
+                  - cat util.sh
+                  - echo "should have echoed out the sh file."
+                  - echo "run the sh file"
+                  - sh util.sh
+                  - echo "check the util.log"
+                  - cat util.log
+                  - echo "expect to see additional log info."
+                  - echo "success"
+                  - echo "try to ssh into the droplet."
+                  #- this works from my local: ssh -i ~/.ssh/pipeline_ssh_key root@157.245.216.183
+                  #- the follwing would not work as is. but the named key exists in bitbucket...named by them differently.
+                  # - ssh -i ~/.ssh/bayonforte_pipeline_key root@157.245.216.183
+                  #- ssh -i bayonforte_pipeline_key root@157.245.216.183 Fail.1.0 could not use psuedo terminal cmd ?
+                  #- ssh bayonforte_pipeline_key root@157.245.216.183 Fail.1.1 # could not resolve host name fluke
+                  #- ssh root@157.245.216.183 Fail.1.2
+                  # added the pubkey again to authorized_keys
+                  #- ssh root@157.245.216.183
+                  #- echo "success or fail permission into droplet?"
+                  - echo "try the deployment template. for ssh. "
+                  # remove certain variables:  MODE: "<string>" # Optional , PORT: "<string>" # Optional,  EXTRA_ARGS: "<string>" # Optional, DEBUG: "<string>" # Optional
+                  - pipe: atlassian/ssh-run:0.2.3
+                    variables:
+                        SSH_USER: "root"
+                        SERVER: "157.245.216.183"
+                        MODE: "command"
+                        COMMAND: "./util.sh"
+                        SSH_KEY: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC6Jm5Xfq9vZ/IpYv1sNIiJDwcr3fa43pjUA5dPdJlQVOjmCctfPTfG3P9no4CJCbwZi6DHvKn5x+B777IP2k9HsUcC8S6HPlrhF2peo+nVzY3a/jkjQqiD0EstoJ8TZ+AxHshAJtQ8lSaIhbejAcxFszp/Wh8V54ii6i6zwEAFKqnfqDVT0hKVfMQrWWXLb+NczG93R294+4WuG1GOtujhQvAngQsGEZQykVQtUxSpWxB2KCsufE5Z9CfzBPb6V9nZqOZ4yJXjj+xZ2aw5aumXNgq2Zmb/tOkKFuMtxf+Zx3JHspqcK3+N7KuScjiSJNM+9aBKGnxxu7soben5ecRECl2NRPdnAiQu103DBwomAsjxhEhhVLrbYTri+oDL2cRZX5govR9QL7c7LKalfgIiQBl97tgrvE7HUiwnKU41AwJuIgTYpWNiVa1kIJ4R58Q96IbpaXtFuMStdsoj51re/ZBSQCtPFDdefK49TmSx9mZ3ZMAJqf9isKJ1AmVtAcs=" # Optional
+

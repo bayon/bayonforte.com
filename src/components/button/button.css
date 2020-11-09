@@ -1,0 +1,9 @@
+.button-style{
+    border:solid 1px #ccc;
+    border-radius:8px;
+    padding:10px;
+}
+
+.button-style:hover{
+    opacity:.5;
+}
