@@ -1,0 +1,50 @@
+
+ 
+
+CICD: 
+app flow:
+   some animation ? , some 3D ? 
+    login/auth 
+ CICD: webhooks:
+
+ github to digital ocean
+ https://www.digitalocean.com/community/tutorials/how-to-use-node-js-and-github-webhooks-to-keep-remote-projects-in-sync
+
+bitbucket :
+https://confluence.atlassian.com/bitbucket/manage-webhooks-735643732.html
+
+specific: 
+https://stackoverflow.com/questions/50053687/using-bitbucket-pipelines-to-deploy-onto-vps-via-ssh-access/50124202#50124202
+
+
+
+digital ocean is unergoing maintenance: 
+I createdd an ssh key in Bitbucket , and I got the 'finger print' for my digital ocean droplet. 
+I didn't get it to work as expected and started looking into whether or not to 'white list' the 
+bitbucket IP addressed on by Droplet...then I found that maintenance was happening. 
+1-22-2020
+157.245.216.183
+
+TRY: 
+ssh root@157.245.216.183 | cd /root/bayonforte.com | sh util.sh | echo "Deploy script finished execution"
+
+Adding new api call: 
+# sagas: 3 steps:
+# api_calls/
+# actions
+# /reducers/data.js  
+# Page 
+# table
+
+// 1-23-2020 
+This morning the api appeared to be down.
+...
+todos: get version
+events.js:183
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: Connection lost: The server closed the connection.
+
+
+Error: Connection lost: The server closed the connection.

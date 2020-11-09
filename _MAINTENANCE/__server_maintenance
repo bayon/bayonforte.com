@@ -1,0 +1,93 @@
+
+Digital Ocean:
+ssh root@157.245.216.183
+
+M A J O R    C H A N G E : remember that I set up nginx and only use microservices on docker. 2-10-2020
+
+
+
+bayonforte.com
+cat .env
+REACT_APP_API_URL = http://bayonforte.com:4000
+
+//////////////////////////////////////////////////////////////////////////////
+
+         APP :
+NEW: pull repo, build new version of image, WAIT, then, stop old app container, 
+start new app container , rm old app container and image. 
+#remember to increment versions for the image build and the container run.
+
+
+MAJOR CHANGE: 
+NOT using docker for the app.
+USING NGINX instead. 
+
+                        git pull origin master 
+
+                        docker container stop bayonforte.com.v.1
+
+                        docker container rm bayonforte.com.v.1
+
+                        docker image rm bayonforte.com  -> & other related images.
+
+                        #check cd 
+
+                        docker build . -t  bayonforte.com.v.1.0.2
+
+                        docker run  -d \
+                        --publish 80:80 \
+                        --name=bayonforte.com.v.1.0.1 bayonforte.com.v.1.0.2
+
+/////////////////////////////////////////////////////////////////////////////
+
+        API :
+git pull origin master 
+
+docker container stop nodejs-microservice
+
+docker container rm nodejs-microservice
+
+#check cd 
+
+docker build . -t  nodejs-microservice
+
+docker run  -d \
+--publish 4000:4000 \
+-e MYSQL_USER='root' \
+-e MYSQL_PASSWORD='rootwerk' \
+-e MYSQL_DATABASE='forteworks' \
+-e MYSQL_HOST='172.17.0.2' \
+--link mysql-microservice:db \
+--name=nodejs-microservice nodejs-microservice
+
+
+172.17.0.3 ->  ???????????
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+        DATABASE:
+
+docker container stop mysql-microservice
+
+docker container rm mysql-microservice
+# check cd 
+
+docker build -t mysql .
+
+docker run  -d \
+--publish 6603:3306 \
+--volume=/root/bayonforte.com.microservices/microservices/mysql-microservice/data:/var/lib/mysql \
+--name=mysql-microservice mysql
+
+docker logs mysql-microservice
+
+>>> test connection ifconfig to verify IP.
+???
+mysql -u root -p -h 172.17.0.1 -P 6603 -D forteworks    password is rootwerk. 
+ 
+ 
+
+
+
+sudo npm install -g pm2

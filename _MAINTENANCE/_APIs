@@ -1,0 +1,9 @@
+
+Open Weather: 
+bayon@forteworks.com 
+0penWeather 
+app id: 0f8a8df4efb46ad96d0c64cb4923e9b4
+
+http://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=0f8a8df4efb46ad96d0c64cb4923e9b4
+
+http://api.openweathermap.org/data/2.5/forecast?zip=47115&appid=0f8a8df4efb46ad96d0c64cb4923e9b4

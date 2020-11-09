@@ -1,0 +1,9 @@
+.babylon-canvas {
+    height: auto;
+    min-height: 300px;
+    width: 100%;
+}
+
+#root canvas {
+    opacity: 1 !important;
+}

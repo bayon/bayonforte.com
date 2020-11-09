@@ -1,0 +1,84 @@
+
+Docker Integration: 
+Brief: This file is one complete set of installation steps for bayonforte.com installing docker images and containers 
+for mysql and api. 
+2020-01-21
+Digital Ocean:
+ssh root@157.245.216.183
+
+mysql configs:
+mysql user: root 
+mysql pass: rootwerk
+database: fortworks 
+
+DEPLOY TLDR;
+1
+*cd correct DIR !
+docker build -t mysql .
+2
+docker run  -d \
+--publish 6603:3306 \
+--volume=/root/bayonforte.com.microservices/microservices/mysql-microservice/data:/var/lib/mysql \
+--name=mysql-microservice mysql
+3
+*cd correct DIR !
+docker build -t nodejs .
+4
+docker run  -d \
+--publish 4000:4000 \
+-e MYSQL_USER='root' \
+-e MYSQL_PASSWORD='rootwerk' \
+-e MYSQL_DATABASE='forteworks' \
+-e MYSQL_HOST='172.17.0.2' \
+--link mysql-microservice:db \
+--name=nodejs-microservice nodejs
+5 
+*cd correct DIR !
+docker build . -t  bayonforte.com
+6
+docker run  -d \
+--publish 80:80 \
+--name=bayonforte.com.v.1 bayonforte.com
+
+all code on bitbucket.
+
+
+//////////////////////////////////////////////////////////////////////////////
+REACT APP UPDATE:
+
+docker container stop bayonforte.com.v.1
+
+docker container rm bayonforte.com.v.1
+
+docker image rm bayonforte.com  -> & other related images.
+
+#check cd 
+
+git pull origin master 
+docker build . -t  bayonforte.com 
+
+docker run  -d \
+--publish 80:80 \
+--name=bayonforte.com.v.1 bayonforte.com
+
+/////////////////////////////////////////////////////////////////////////////
+API UPDATE:
+
+docker container stop nodejs-microservice
+
+docker container rm nodejs-microservice
+
+#check cd 
+
+docker build . -t  nodejs-microservice
+
+docker run  -d \
+--publish 4000:4000 \
+-e MYSQL_USER='root' \
+-e MYSQL_PASSWORD='rootwerk' \
+-e MYSQL_DATABASE='forteworks' \
+-e MYSQL_HOST='172.17.0.2' \
+--link mysql-microservice:db \
+--name=nodejs-microservice nodejs-microservice
+
+

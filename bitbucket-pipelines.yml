@@ -1,0 +1,33 @@
+# Check our guides at https://confluence.atlassian.com/x/14UWN for more examples.
+# Only use spaces to indent your .yml configuration.
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+image: node:10.15.3
+
+pipelines:
+  default:
+    - step:
+        caches:
+          - node
+        script: # Modify the commands below to build your repository.
+          - npm install
+          - npm test
+          - npm build
+        script:
+          - pipe: atlassian/rsync-deploy:0.4.0
+            variables:
+              USER: 'root'
+              SERVER: '157.245.216.183'
+              REMOTE_PATH: '/var/www/'
+              LOCAL_PATH: './'
+# './' .... so this pushes up the new code but it does not rebuild the image or restart the container.
+#  it bypasses the git pull origin master and password step. 
+
+        #script:
+         # - pipe: atlassian/ssh-run:0.2.3
+          #  variables:
+           #   SSH_USER: 'root'
+            #  SERVER: '157.245.216.183'
+             # MODE: 'script'
+              #COMMAND: './util.sh'
+              
