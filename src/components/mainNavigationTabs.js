@@ -154,7 +154,7 @@ export default function MainNavigationTabs() {
                         <ListItemIcon>
                             {text === "MERN" ? (
                                 <a
-                                    href="http://localhost:3000"
+                                    href={process.env.REACT_APP_HOST}
                                     target="_blank"
                                 >
                                     Log In
