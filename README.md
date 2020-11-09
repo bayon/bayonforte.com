@@ -176,3 +176,9 @@ location /app2 {
 // Main Resource: 
 
 https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
+
+
+KNOWN ISSUES: 
+
+- "non-www" domain name not working.
+    - when I created the certs I had to comment out the "non-www" just to get one of them to work. 
